@@ -88,7 +88,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/07/08/基于卷积神经网络的图像风格迁移/基于卷积神经网络的图像风格迁移/images/res.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/08/基于卷积神经网络的图像风格迁移/基于卷积神经网络的图像风格迁移/images/transfer.png">
-<meta property="og:updated_time" content="2018-07-12T11:42:54.384Z">
+<meta property="og:updated_time" content="2018-07-12T12:10:42.164Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于卷积神经网络的图像风格迁移">
 <meta name="twitter:description" content="基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Algorithm of Artistic Style中提出，并提出基于图片迭代的第一种图像风格神经网络方法。 风格迁移实质：使得从 内容图像中抽取的风格表达要接近于从 风格图像中抽取的风格表达，在这个过程中，还要尽量保持内容图像的内容变化最小。 风格提取与特征提取图的上半部分是风格重建，由图可见，越用高层的特征，">
@@ -307,7 +307,7 @@
 <h1 id="风格提取与特征提取"><a href="#风格提取与特征提取" class="headerlink" title="风格提取与特征提取"></a>风格提取与特征提取</h1><p><img src="/2018/07/08/基于卷积神经网络的图像风格迁移/基于卷积神经网络的图像风格迁移/images/res.png" alt="res"><br>图的上半部分是风格重建，由图可见，越用高层的特征，风格重建就越粗粒度化。下半部分是内容重建，越是底层的特征，重建效果就越精细，越不容易变形。</p>
 <h3 id="重要观点："><a href="#重要观点：" class="headerlink" title="重要观点："></a>重要观点：</h3><p>网络的高层特征一般是关于输入图像的<code>物体</code>和<code>布局</code>等信息，底层特征一般表达输入图像的<code>像素</code>信息。提取特征时，不同层的表达效果不一样。</p>
 <p>根据这个特点，可以分别提取内容和风格特征。网络的高层会捕捉输入图像的高阶内容，比如物体和结构，但不会限制重构过程中的确切像素值（内容重建 d,e）。相反，低层重建只是简单的复制原始图像中确定的像素值（内容重建 a-c)。我们将网络的高层的特征响应结果作为内容表示。</p>
-<h1 id="迁移过程"><a href="#迁移过程" class="headerlink" title="迁移过程"></a>迁移过程</h1><p><img src="/2018/07/08/基于卷积神经网络的图像风格迁移/基于卷积神经网络的图像风格迁移/images/transfer.png" alt="transfer"><br><br>a表示风格图像，a 作为VGG网络的输入，这样VGG的每个卷积层都可以得到很多feature map ，用A<sup>l</sup>表示</p>
+<h1 id="迁移过程"><a href="#迁移过程" class="headerlink" title="迁移过程"></a>迁移过程</h1><p><img src="/2018/07/08/基于卷积神经网络的图像风格迁移/基于卷积神经网络的图像风格迁移/images/transfer.png" alt="transfer"><br><br>a表示风格图像，a 作为VGG网络的输入，这样VGG的每个卷积层都可以得到很多feature map ，用A<sup>l</sup>表示，l表示层，因为输入的是风格图像，所以这些A<sup>l</sup>可以称为style representation 。这里每一层的特征A<sup>l</sup>都被保存下来，左边每个卷积层的右边都有一个箭头指向生成的feature map .<br>右边，p表示输入的带转换的图像，同样作为VGG网络的输入，经过多个卷积和pool层，每层都会生成很多feature map，用P<sup>l</sup>表示，并称之为content representation 。这里只保存conv4层的feature map,conv4层左边有一个箭头指向生成的feature map。至于为什么要采用高层信息，前面已经解释过了。<br>中间，X表示生成的随机白噪声图像，同样作为VGG 网络的输入，这样每个卷积层都可以计算出style feature G<sup>l</sup>和centent fetures F<sup>l</sup>。这里的content features F<sup>l</sup>是每个卷积层的feature map，style features G<sup>l</sup>是根据F<sup>l</sup>利用Gram 矩阵计算得到的。<br>即同时将三张图片（A,P,X)输入进三个相同的网络，对A求出风格特征，对P求出内容特征，然后对X求导，这样，得到的X就有A的风格和P的内容。</p>
 
       
     </div>
