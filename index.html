@@ -305,10 +305,10 @@
           
             <p>基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在<a href="https://arxiv.org/pdf/1508.06576v2.pdf" target="_blank" rel="noopener">A Neural Algorithm of Artistic Style</a>中提出，并提出基于图片迭代的第一种图像风格神经网络方法。</p>
 <h1 id="风格迁移"><a href="#风格迁移" class="headerlink" title="风格迁移"></a>风格迁移</h1><p>实质：使得从 <span class="label label-info">内容图像</span>中抽取的风格表达要接近于从 <span class="label label-info">风格图像</span>中抽取的风格表达，在这个过程中，还要尽量保持内容图像的内容变化最小。</p>
-<h1 id="风格提取与特征提取"><a href="#风格提取与特征提取" class="headerlink" title="风格提取与特征提取"></a>风格提取与特征提取</h1><p><img src="../../themes/next/source/images/res.png" alt="res"><br>图的上半部分是风格重建，由图可见，越用高层的特征，风格重建就越粗粒度化。下半部分是内容重建，越是底层的特征，重建效果就越精细，越不容易变形。</p>
+<h1 id="风格提取与特征提取"><a href="#风格提取与特征提取" class="headerlink" title="风格提取与特征提取"></a>风格提取与特征提取</h1><p><img src="/2018/07/08/基于卷积神经网络的图像风格迁移/基于卷积神经网络的图像风格迁移/images/res.png" alt="res"><br>图的上半部分是风格重建，由图可见，越用高层的特征，风格重建就越粗粒度化。下半部分是内容重建，越是底层的特征，重建效果就越精细，越不容易变形。</p>
 <h3 id="重要观点："><a href="#重要观点：" class="headerlink" title="重要观点："></a>重要观点：</h3><p>网络的高层特征一般是关于输入图像的<code>物体</code>和<code>布局</code>等信息，底层特征一般表达输入图像的<code>像素</code>信息。提取特征时，不同层的表达效果不一样。</p>
 <p>根据这个特点，可以分别提取内容和风格特征。网络的高层会捕捉输入图像的高阶内容，比如物体和结构，但不会限制重构过程中的确切像素值（内容重建 d,e）。相反，低层重建只是简单的复制原始图像中确定的像素值（内容重建 a-c)。我们将网络的高层的特征响应结果作为内容表示。</p>
-<h1 id="迁移过程"><a href="#迁移过程" class="headerlink" title="迁移过程"></a>迁移过程</h1><p><img src="themes/next/source/images/transfer.png" alt="transfer"></p>
+<h1 id="迁移过程"><a href="#迁移过程" class="headerlink" title="迁移过程"></a>迁移过程</h1><p><img src="/2018/07/08/基于卷积神经网络的图像风格迁移/基于卷积神经网络的图像风格迁移/images/transfer.png" alt="transfer"></p>
 
           
         
