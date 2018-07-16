@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/08/Style_Transfer图像风格迁移/res.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/08/Style_Transfer图像风格迁移/transfer.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/08/Style_Transfer图像风格迁移/fast_net.png">
-<meta property="og:updated_time" content="2018-07-16T12:19:41.321Z">
+<meta property="og:updated_time" content="2018-07-16T12:31:28.229Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Style Transfer 图像风格迁移">
 <meta name="twitter:description" content="本文介绍两篇论文：  Gatys A Neural Algorithm of Artistic Style  [源代码] 李飞飞 Perceptual Losses for Real-Time Style Transfer and Super-Resolution  [源代码]   一、Neural Style基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Al">
@@ -316,15 +316,20 @@
 <li>如何分别表示和提取图像的内容和风格</li>
 <li>如何刻画内容和风格上的相似性</li>
 </ol>
-<h1 id="1-2-1-风格提取与特征提取"><a href="#1-2-1-风格提取与特征提取" class="headerlink" title="1.2.1 风格提取与特征提取"></a>1.2.1 风格提取与特征提取</h1><p>卷积神经网络最初是为解决图像识别等问题设计的，通过对它提取的特征的一个反向重建，可以发现一些重要信息。<br><img src="/2018/07/08/Style_Transfer图像风格迁移/res.png" alt="res"><br>上：风格重建，越用<u>高层</u>的特征，风格重建就越<u>粗粒度化</u>。<br>下：内容重建，越是<u>低层</u>的特征，重建效果就越<u>精细</u>，越不容易变形。</p>
+<h2 id="1-2-1-风格提取与特征提取"><a href="#1-2-1-风格提取与特征提取" class="headerlink" title="1.2.1 风格提取与特征提取"></a>1.2.1 风格提取与特征提取</h2><p>卷积神经网络最初是为解决图像识别等问题设计的，通过对它提取的特征的一个反向重建，可以发现一些重要信息。<br><img src="/2018/07/08/Style_Transfer图像风格迁移/res.png" alt="res"><br>上：风格重建，越用<u>高层</u>的特征，风格重建就越<u>粗粒度化</u>。<br>下：内容重建，越是<u>低层</u>的特征，重建效果就越<u>精细</u>，越不容易变形。</p>
 <h3 id="重要观点："><a href="#重要观点：" class="headerlink" title="重要观点："></a>重要观点：</h3><p>提取特征时，不同层的表达效果不一样。网络的高层特征一般是关于输入图像的<code>物体</code>和<code>布局</code>等信息，底层特征一般表达输入图像的<code>像素</code>信息。</p>
 <p>所以将网络中高层的特征响应结果作为内容表示，高层捕捉到高阶内容，比如物体和结构，但不会限制重构过程中的确切像素值。<br>相反，低层重建只是简单地复制原始图像中的确定的像素值（内容重建 a-c）。</p>
 <p>关于风格表示，不同层的特征表达有不同的视觉效果，因此在提取风格特征时采用的是多层特征的融合，这样风格表达会更加丰富。</p>
-<h1 id="1-2-2-相似性刻画"><a href="#1-2-2-相似性刻画" class="headerlink" title="1.2.2 相似性刻画"></a>1.2.2 相似性刻画</h1><p>定义损失函数:</p>
+<h2 id="1-2-2-相似性刻画"><a href="#1-2-2-相似性刻画" class="headerlink" title="1.2.2 相似性刻画"></a>1.2.2 相似性刻画</h2><p>定义损失函数:</p>
 <script type="math/tex; mode=display">L_{total}(\vec{p},\vec{a},\vec{x})=\alpha L_{content}(\vec{p},vec{x})+\beta L_{style}(\vec{a},\vec{x})</script><h1 id="1-3-迁移过程"><a href="#1-3-迁移过程" class="headerlink" title="1.3 迁移过程"></a>1.3 迁移过程</h1><p><img src="/2018/07/08/Style_Transfer图像风格迁移/transfer.png" alt="transfer"><br>a表示风格图像，a 作为VGG网络的输入，这样VGG的每个卷积层都可以得到很多feature map ，用A<sup>l</sup>表示，l表示层，因为输入的是风格图像，所以这些A<sup>l</sup>可以称为style representation 。这里每一层的特征A<sup>l</sup>都被保存下来，左边每个卷积层的右边都有一个箭头指向生成的feature map .</p>
 <p>右边，p表示输入的带转换的图像，同样作为VGG网络的输入，经过多个卷积和pool层，每层都会生成很多feature map，用P<sup>l</sup>表示，并称之为content representation 。这里只保存conv4层的feature map,conv4层左边有一个箭头指向生成的feature map。至于为什么要采用高层信息，前面已经解释过了。</p>
 <p>中间，X表示生成的随机白噪声图像，同样作为VGG 网络的输入，这样每个卷积层都可以计算出style feature G<sup>l</sup>和centent fetures F<sup>l</sup>。这里的content features F<sup>l</sup>是每个卷积层的feature map，style features G<sup>l</sup>是根据F<sup>l</sup>利用Gram 矩阵计算得到的。</p>
 <p>即同时将三张图片（A,P,X)输入进三个相同的网络，对A求出风格特征，对P求出内容特征，然后对X求导，这样，得到的X就有A的风格和P的内容。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>每一次迭代优化都需要经过前馈、反馈预训练好的整个网络；</li>
+<li>通过反向传播迭代更新图像，最小化根据特征重建的代价函数；</li>
+<li>每一次运行都是重新训练一个模型，且不可复用。</li>
+</ol>
 <hr>
 <h1 id="二、Fast-Neural-Style"><a href="#二、Fast-Neural-Style" class="headerlink" title="二、Fast Neural Style"></a>二、Fast Neural Style</h1><h1 id="基于感知损失函数的图像风格迁移"><a href="#基于感知损失函数的图像风格迁移" class="headerlink" title="基于感知损失函数的图像风格迁移"></a>基于感知损失函数的图像风格迁移</h1><h2 id="Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><a href="#Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution" class="headerlink" title="Perceptual Losses for  Real-Time Style Transfer and Super-Resolution"></a>Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</h2><p>Gatys 的方法每次要将一幅内容图像进行风格迁移，就要进行不断的迭代，将原有噪声图进行微调，逐步逼近。<br>李飞飞的方法是先将其进行训练，训练得到前向生成网络，再将待转换图像输入，即可得到预训练风格的图像。</p>
 <p>训练一个用于图像转换任务的前馈网络，且不用逐像素求差构造损失函数，转而使用感知损失函数，从预训练好的网络中提取高级特征。在训练的过程中，感知损失函数比逐像素损失函数更适合用来衡量图像之间的相似程度。<br><img src="/2018/07/08/Style_Transfer图像风格迁移/fast_net.png" alt="fast_net"></p>
@@ -334,6 +339,10 @@
 <h2 id="训练阶段"><a href="#训练阶段" class="headerlink" title="训练阶段"></a>训练阶段</h2><p>选定一张风格图片。训练过程中，将数据集中的图片输入网络，转换网络生成结果图片y,损失网络提取图像的特征图，将生成图片y分别于目标风格图片ys和目标输入图片（内容图片）yc做损失计算，根据损失值来调整转换网络的权值，通过最小化损失值来达到目标效果。</p>
 <h2 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h2><p>给定一张图片，将其输入已经训练好的转换网络，输出这张图片网络转换后的结果。</p>
 <p>核心是先训练保存常用的“风格”参数。用户输入需要转换风格的图像A到网络中，再指定网络调用B风格的参数，输出的图片C其实只是网络最后一层的输出，中间不会涉及过多的参数调整及优化。</p>
+<h1 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h1><ol>
+<li>提前训练了一个前馈网络，使用梯度下降，通过迭代式地更新模型来优化网络模型；</li>
+<li>解决了方法一速度和计算成本的问题，但是牺牲了模型的灵活性；</li>
+</ol>
 
       
     </div>
@@ -367,10 +376,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/07/16/test/" rel="prev" title="test">
-                test <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -451,7 +456,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -488,7 +493,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Neural-Style"><span class="nav-number">1.</span> <span class="nav-text">一、Neural Style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-1-风格迁移"><span class="nav-number">2.</span> <span class="nav-text">1.1 风格迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-2-需要解决两个问题："><span class="nav-number">3.</span> <span class="nav-text">1.2 需要解决两个问题：</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-2-1-风格提取与特征提取"><span class="nav-number">4.</span> <span class="nav-text">1.2.1 风格提取与特征提取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重要观点："><span class="nav-number">4.0.1.</span> <span class="nav-text">重要观点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-2-2-相似性刻画"><span class="nav-number">5.</span> <span class="nav-text">1.2.2 相似性刻画</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-3-迁移过程"><span class="nav-number">6.</span> <span class="nav-text">1.3 迁移过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Fast-Neural-Style"><span class="nav-number">7.</span> <span class="nav-text">二、Fast Neural Style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于感知损失函数的图像风格迁移"><span class="nav-number">8.</span> <span class="nav-text">基于感知损失函数的图像风格迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><span class="nav-number">8.1.</span> <span class="nav-text">Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-1-Loss-Network"><span class="nav-number">9.</span> <span class="nav-text">2.1 Loss Network</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-2-Image-Transform-Net"><span class="nav-number">10.</span> <span class="nav-text">2.2 Image Transform Net</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#训练阶段"><span class="nav-number">10.1.</span> <span class="nav-text">训练阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行阶段"><span class="nav-number">10.2.</span> <span class="nav-text">执行阶段</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Neural-Style"><span class="nav-number">1.</span> <span class="nav-text">一、Neural Style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-1-风格迁移"><span class="nav-number">2.</span> <span class="nav-text">1.1 风格迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-2-需要解决两个问题："><span class="nav-number">3.</span> <span class="nav-text">1.2 需要解决两个问题：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-1-风格提取与特征提取"><span class="nav-number">3.1.</span> <span class="nav-text">1.2.1 风格提取与特征提取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重要观点："><span class="nav-number">3.1.1.</span> <span class="nav-text">重要观点：</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-2-相似性刻画"><span class="nav-number">3.2.</span> <span class="nav-text">1.2.2 相似性刻画</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-3-迁移过程"><span class="nav-number">4.</span> <span class="nav-text">1.3 迁移过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Fast-Neural-Style"><span class="nav-number">6.</span> <span class="nav-text">二、Fast Neural Style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于感知损失函数的图像风格迁移"><span class="nav-number">7.</span> <span class="nav-text">基于感知损失函数的图像风格迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><span class="nav-number">7.1.</span> <span class="nav-text">Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-1-Loss-Network"><span class="nav-number">8.</span> <span class="nav-text">2.1 Loss Network</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-2-Image-Transform-Net"><span class="nav-number">9.</span> <span class="nav-text">2.2 Image Transform Net</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#训练阶段"><span class="nav-number">9.1.</span> <span class="nav-text">训练阶段</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#执行阶段"><span class="nav-number">9.2.</span> <span class="nav-text">执行阶段</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结-1"><span class="nav-number">10.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
