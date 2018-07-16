@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Algorithm of Artistic Style中提出，并提出基于图片迭代的第一种图像风格神经网络方法。 风格迁移实质：使得从 内容图像中抽取的风格表达要接近于从 风格图像中抽取的风格表达，在这个过程中，还要尽量保持内容图像的内容变化最小。 风格提取与特征提取卷积神经网络最初是为解决图像识别等问题设计的，通过">
+<meta name="description" content="本文介绍两篇论文：  Gatys A Neural Algorithm of Artistic Style源代码 李飞飞 Perceptual Losses for Real-Time Style Transfer and Super-Resolution源代码   一、Neural Style基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Algorithm">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Style Transfer 图像风格迁移">
 <meta property="og:url" content="http://yoursite.com/2018/07/08/Style Transfer 图像风格迁移/index.html">
 <meta property="og:site_name" content="Leila 的博客">
-<meta property="og:description" content="基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Algorithm of Artistic Style中提出，并提出基于图片迭代的第一种图像风格神经网络方法。 风格迁移实质：使得从 内容图像中抽取的风格表达要接近于从 风格图像中抽取的风格表达，在这个过程中，还要尽量保持内容图像的内容变化最小。 风格提取与特征提取卷积神经网络最初是为解决图像识别等问题设计的，通过">
+<meta property="og:description" content="本文介绍两篇论文：  Gatys A Neural Algorithm of Artistic Style源代码 李飞飞 Perceptual Losses for Real-Time Style Transfer and Super-Resolution源代码   一、Neural Style基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Algorithm">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2018/07/08/Style%20Transfer%20图像风格迁移/Users/leila/Desktop/blog/source/images/road_mix.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/08/Style%20Transfer%20图像风格迁移/images/res.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/08/Style%20Transfer%20图像风格迁移/images/transfer.png">
-<meta property="og:updated_time" content="2018-07-13T06:35:30.139Z">
+<meta property="og:updated_time" content="2018-07-16T07:30:24.910Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Style Transfer 图像风格迁移">
-<meta name="twitter:description" content="基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Algorithm of Artistic Style中提出，并提出基于图片迭代的第一种图像风格神经网络方法。 风格迁移实质：使得从 内容图像中抽取的风格表达要接近于从 风格图像中抽取的风格表达，在这个过程中，还要尽量保持内容图像的内容变化最小。 风格提取与特征提取卷积神经网络最初是为解决图像识别等问题设计的，通过">
+<meta name="twitter:description" content="本文介绍两篇论文：  Gatys A Neural Algorithm of Artistic Style源代码 李飞飞 Perceptual Losses for Real-Time Style Transfer and Super-Resolution源代码   一、Neural Style基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在A Neural Algorithm">
 <meta name="twitter:image" content="http://yoursite.com/2018/07/08/Style%20Transfer%20图像风格迁移/Users/leila/Desktop/blog/source/images/road_mix.png">
 
 
@@ -303,18 +303,31 @@
       
 
       
-        <p>基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在<a href="https://arxiv.org/pdf/1508.06576v2.pdf" target="_blank" rel="noopener">A Neural Algorithm of Artistic Style</a>中提出，并提出基于图片迭代的第一种图像风格神经网络方法。</p>
+        <p>本文介绍两篇论文：</p>
+<ol>
+<li>Gatys <a href="https://arxiv.org/pdf/1508.06576v2.pdf" target="_blank" rel="noopener">A Neural Algorithm of Artistic Style</a><a href="https://github.com/jcjohnson/neural-style" target="_blank" rel="noopener">源代码</a></li>
+<li>李飞飞 <a href="https://arxiv.org/abs/1603.08155" target="_blank" rel="noopener">Perceptual Losses for Real-Time Style Transfer and Super-Resolution</a><a href="https://github.com/yusuketomoto/chainer-fast-neuralstyle" target="_blank" rel="noopener">源代码</a></li>
+</ol>
+<hr>
+<h1 id="一、Neural-Style"><a href="#一、Neural-Style" class="headerlink" title="一、Neural Style"></a>一、Neural Style</h1><p>基于卷积神经网络的图像风格迁移这个概念是在2015年由Gatys在<a href="https://arxiv.org/pdf/1508.06576v2.pdf" target="_blank" rel="noopener">A Neural Algorithm of Artistic Style</a>中提出，并提出基于图片迭代的第一种图像风格神经网络方法。</p>
 <h1 id="风格迁移"><a href="#风格迁移" class="headerlink" title="风格迁移"></a>风格迁移</h1><p>实质：使得从 <span class="label label-info">内容图像</span>中抽取的风格表达要接近于从 <span class="label label-info">风格图像</span>中抽取的风格表达，在这个过程中，还要尽量保持内容图像的内容变化最小。<br><img src="/2018/07/08/Style Transfer 图像风格迁移/Users/leila/Desktop/blog/source/images/road_mix.png" alt="road_mix"></p>
+<p>需要解决两个问题：</p>
+<ol>
+<li>如何分别表示和提取图像的内容和风格</li>
+<li>如何刻画内容和风格上的相似性</li>
+</ol>
 <h1 id="风格提取与特征提取"><a href="#风格提取与特征提取" class="headerlink" title="风格提取与特征提取"></a>风格提取与特征提取</h1><p>卷积神经网络最初是为解决图像识别等问题设计的，通过对它提取的特征的一个反向重建，可以发现一些重要信息。<br><img src="/2018/07/08/Style Transfer 图像风格迁移/images/res.png" alt="res"><br>上：风格重建，越用<u>高层</u>的特征，风格重建就越<u>粗粒度化</u>。<br>下：内容重建，越是<u>低层</u>的特征，重建效果就越<u>精细</u>，越不容易变形。</p>
 <h3 id="重要观点："><a href="#重要观点：" class="headerlink" title="重要观点："></a>重要观点：</h3><p>提取特征时，不同层的表达效果不一样。网络的高层特征一般是关于输入图像的<code>物体</code>和<code>布局</code>等信息，底层特征一般表达输入图像的<code>像素</code>信息。</p>
 <p>所以将网络中高层的特征响应结果作为内容表示，高层捕捉到高阶内容，比如物体和结构，但不会限制重构过程中的确切像素值。<br>相反，低层重建只是简单地复制原始图像中的确定的像素值（内容重建 a-c）。</p>
 <p>关于风格表示，不同层的特征表达有不同的视觉效果，因此在提取风格特征时采用的是多层特征的融合，这样风格表达会更加丰富。</p>
+<h1 id="相似性刻画"><a href="#相似性刻画" class="headerlink" title="相似性刻画"></a>相似性刻画</h1><p>定义损失函数:<br>$L_{total}(\vec{p},\vec{a},\vec{x})=\alphaL_{content}(\vec{p},vec{x})+\betaL_{style}(\vec{a},\vec{x})$</p>
 <h1 id="迁移过程"><a href="#迁移过程" class="headerlink" title="迁移过程"></a>迁移过程</h1><p><img src="/2018/07/08/Style Transfer 图像风格迁移/images/transfer.png" alt="transfer"><br>a表示风格图像，a 作为VGG网络的输入，这样VGG的每个卷积层都可以得到很多feature map ，用A<sup>l</sup>表示，l表示层，因为输入的是风格图像，所以这些A<sup>l</sup>可以称为style representation 。这里每一层的特征A<sup>l</sup>都被保存下来，左边每个卷积层的右边都有一个箭头指向生成的feature map .</p>
 <p>右边，p表示输入的带转换的图像，同样作为VGG网络的输入，经过多个卷积和pool层，每层都会生成很多feature map，用P<sup>l</sup>表示，并称之为content representation 。这里只保存conv4层的feature map,conv4层左边有一个箭头指向生成的feature map。至于为什么要采用高层信息，前面已经解释过了。</p>
 <p>中间，X表示生成的随机白噪声图像，同样作为VGG 网络的输入，这样每个卷积层都可以计算出style feature G<sup>l</sup>和centent fetures F<sup>l</sup>。这里的content features F<sup>l</sup>是每个卷积层的feature map，style features G<sup>l</sup>是根据F<sup>l</sup>利用Gram 矩阵计算得到的。</p>
 <p>即同时将三张图片（A,P,X)输入进三个相同的网络，对A求出风格特征，对P求出内容特征，然后对X求导，这样，得到的X就有A的风格和P的内容。</p>
 <hr>
-<h1 id="基于感知损失函数的图像风格迁移-Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><a href="#基于感知损失函数的图像风格迁移-Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution" class="headerlink" title="基于感知损失函数的图像风格迁移 Perceptual Losses for  Real-Time Style Transfer and Super-Resolution"></a>基于感知损失函数的图像风格迁移 Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</h1><p>训练一个用于图像转换任务的前馈网络，且不用逐像素求差构造损失函数，转而使用感知损失函数，从预训练好的网络中提取高级特征。在训练的过程中，感知损失函数比逐像素损失函数更适合用来衡量图像之间的相似程度。</p>
+<h1 id="二、Fast-Neural-Style"><a href="#二、Fast-Neural-Style" class="headerlink" title="二、Fast Neural Style"></a>二、Fast Neural Style</h1><h1 id="基于感知损失函数的图像风格迁移"><a href="#基于感知损失函数的图像风格迁移" class="headerlink" title="基于感知损失函数的图像风格迁移"></a>基于感知损失函数的图像风格迁移</h1><h2 id="Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><a href="#Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution" class="headerlink" title="Perceptual Losses for  Real-Time Style Transfer and Super-Resolution"></a>Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</h2><p>Gatys 的方法每次要将一幅内容图像进行风格迁移，就要进行不断的迭代，将原有噪声图进行微调，逐步逼近。<br>李飞飞的方法是先将其进行训练，训练得到前向生成网络，再将待转换图像输入，即可得到预训练风格的图像。</p>
+<p>训练一个用于图像转换任务的前馈网络，且不用逐像素求差构造损失函数，转而使用感知损失函数，从预训练好的网络中提取高级特征。在训练的过程中，感知损失函数比逐像素损失函数更适合用来衡量图像之间的相似程度。</p>
 
       
     </div>
@@ -465,7 +478,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#风格迁移"><span class="nav-number">1.</span> <span class="nav-text">风格迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#风格提取与特征提取"><span class="nav-number">2.</span> <span class="nav-text">风格提取与特征提取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重要观点："><span class="nav-number">2.0.1.</span> <span class="nav-text">重要观点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移过程"><span class="nav-number">3.</span> <span class="nav-text">迁移过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于感知损失函数的图像风格迁移-Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><span class="nav-number">4.</span> <span class="nav-text">基于感知损失函数的图像风格迁移 Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、Neural-Style"><span class="nav-number">1.</span> <span class="nav-text">一、Neural Style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#风格迁移"><span class="nav-number">2.</span> <span class="nav-text">风格迁移</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#风格提取与特征提取"><span class="nav-number">3.</span> <span class="nav-text">风格提取与特征提取</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#重要观点："><span class="nav-number">3.0.1.</span> <span class="nav-text">重要观点：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#相似性刻画"><span class="nav-number">4.</span> <span class="nav-text">相似性刻画</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#迁移过程"><span class="nav-number">5.</span> <span class="nav-text">迁移过程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、Fast-Neural-Style"><span class="nav-number">6.</span> <span class="nav-text">二、Fast Neural Style</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#基于感知损失函数的图像风格迁移"><span class="nav-number">7.</span> <span class="nav-text">基于感知损失函数的图像风格迁移</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><span class="nav-number">7.1.</span> <span class="nav-text">Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</span></a></li></ol></li></ol></div>
             
 
           </div>
