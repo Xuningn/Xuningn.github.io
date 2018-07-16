@@ -319,8 +319,7 @@
 <h3 id="重要观点："><a href="#重要观点：" class="headerlink" title="重要观点："></a>重要观点：</h3><p>提取特征时，不同层的表达效果不一样。网络的高层特征一般是关于输入图像的<code>物体</code>和<code>布局</code>等信息，底层特征一般表达输入图像的<code>像素</code>信息。</p>
 <p>所以将网络中高层的特征响应结果作为内容表示，高层捕捉到高阶内容，比如物体和结构，但不会限制重构过程中的确切像素值。<br>相反，低层重建只是简单地复制原始图像中的确定的像素值（内容重建 a-c）。</p>
 <p>关于风格表示，不同层的特征表达有不同的视觉效果，因此在提取风格特征时采用的是多层特征的融合，这样风格表达会更加丰富。</p>
-<h1 id="1-2-2-相似性刻画"><a href="#1-2-2-相似性刻画" class="headerlink" title="1.2.2 相似性刻画"></a>1.2.2 相似性刻画</h1><p>定义损失函数:<br><img src="http://chart.googleapis.com/chart?cht=tx&amp;chl=\Large T(n" alt=""> = \Theta(n))</p>
-<script type="math/tex; mode=display">L_{total}(\vec{p},\vec{a},\vec{x})=\alphaL_{content}(\vec{p},vec{x})+\betaL_{style}(\vec{a},\vec{x})</script><p>$T(n) = \Theta(n)$</p>
+<h1 id="1-2-2-相似性刻画"><a href="#1-2-2-相似性刻画" class="headerlink" title="1.2.2 相似性刻画"></a>1.2.2 相似性刻画</h1><p>定义损失函数:<br><img src="http://chart.googleapis.com/chart?cht=tx&amp;chl=\Large L_{total}(\vec{p},\vec{a},\vec{x}" alt="">=\alphaL_{content}(\vec{p},vec{x})+\betaL_{style}(\vec{a},\vec{x}))</p>
 <h1 id="1-3-迁移过程"><a href="#1-3-迁移过程" class="headerlink" title="1.3 迁移过程"></a>1.3 迁移过程</h1><p><img src="/2018/07/08/Style Transfer 图像风格迁移/images/transfer.png" alt="transfer"><br>a表示风格图像，a 作为VGG网络的输入，这样VGG的每个卷积层都可以得到很多feature map ，用A<sup>l</sup>表示，l表示层，因为输入的是风格图像，所以这些A<sup>l</sup>可以称为style representation 。这里每一层的特征A<sup>l</sup>都被保存下来，左边每个卷积层的右边都有一个箭头指向生成的feature map .</p>
 <p>右边，p表示输入的带转换的图像，同样作为VGG网络的输入，经过多个卷积和pool层，每层都会生成很多feature map，用P<sup>l</sup>表示，并称之为content representation 。这里只保存conv4层的feature map,conv4层左边有一个箭头指向生成的feature map。至于为什么要采用高层信息，前面已经解释过了。</p>
 <p>中间，X表示生成的随机白噪声图像，同样作为VGG 网络的输入，这样每个卷积层都可以计算出style feature G<sup>l</sup>和centent fetures F<sup>l</sup>。这里的content features F<sup>l</sup>是每个卷积层的feature map，style features G<sup>l</sup>是根据F<sup>l</sup>利用Gram 矩阵计算得到的。</p>
