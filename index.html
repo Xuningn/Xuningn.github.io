@@ -439,13 +439,19 @@
 <p>所以将网络中高层的特征响应结果作为内容表示，高层捕捉到高阶内容，比如物体和结构，但不会限制重构过程中的确切像素值。<br>相反，低层重建只是简单地复制原始图像中的确定的像素值（内容重建 a-c）。</p>
 <p>关于风格表示，不同层的特征表达有不同的视觉效果，因此在提取风格特征时采用的是多层特征的融合，这样风格表达会更加丰富。</p>
 <h1 id="1-2-2-相似性刻画"><a href="#1-2-2-相似性刻画" class="headerlink" title="1.2.2 相似性刻画"></a>1.2.2 相似性刻画</h1><p>定义损失函数:</p>
-<script type="math/tex; mode=display">L_{total}(\vec{p},\vec{a},\vec{x})=\alpha L_{content}(\vec{p},vec{x})+\beta L_{style}(\vec{a},\vec{x})</script><h1 id="1-3-迁移过程"><a href="#1-3-迁移过程" class="headerlink" title="1.3 迁移过程"></a>1.3 迁移过程</h1><p><img src="/2018/07/08/Style_Transfer图像风格迁移/iStyle_Transfer图像风格迁移/transfer.png" alt="transfer"><br>a表示风格图像，a 作为VGG网络的输入，这样VGG的每个卷积层都可以得到很多feature map ，用A<sup>l</sup>表示，l表示层，因为输入的是风格图像，所以这些A<sup>l</sup>可以称为style representation 。这里每一层的特征A<sup>l</sup>都被保存下来，左边每个卷积层的右边都有一个箭头指向生成的feature map .</p>
+<script type="math/tex; mode=display">L_{total}(\vec{p},\vec{a},\vec{x})=\alpha L_{content}(\vec{p},vec{x})+\beta L_{style}(\vec{a},\vec{x})</script><h1 id="1-3-迁移过程"><a href="#1-3-迁移过程" class="headerlink" title="1.3 迁移过程"></a>1.3 迁移过程</h1><p><img src="/2018/07/08/Style_Transfer图像风格迁移/transfer.png" alt="transfer"><br>a表示风格图像，a 作为VGG网络的输入，这样VGG的每个卷积层都可以得到很多feature map ，用A<sup>l</sup>表示，l表示层，因为输入的是风格图像，所以这些A<sup>l</sup>可以称为style representation 。这里每一层的特征A<sup>l</sup>都被保存下来，左边每个卷积层的右边都有一个箭头指向生成的feature map .</p>
 <p>右边，p表示输入的带转换的图像，同样作为VGG网络的输入，经过多个卷积和pool层，每层都会生成很多feature map，用P<sup>l</sup>表示，并称之为content representation 。这里只保存conv4层的feature map,conv4层左边有一个箭头指向生成的feature map。至于为什么要采用高层信息，前面已经解释过了。</p>
 <p>中间，X表示生成的随机白噪声图像，同样作为VGG 网络的输入，这样每个卷积层都可以计算出style feature G<sup>l</sup>和centent fetures F<sup>l</sup>。这里的content features F<sup>l</sup>是每个卷积层的feature map，style features G<sup>l</sup>是根据F<sup>l</sup>利用Gram 矩阵计算得到的。</p>
 <p>即同时将三张图片（A,P,X)输入进三个相同的网络，对A求出风格特征，对P求出内容特征，然后对X求导，这样，得到的X就有A的风格和P的内容。</p>
 <hr>
 <h1 id="二、Fast-Neural-Style"><a href="#二、Fast-Neural-Style" class="headerlink" title="二、Fast Neural Style"></a>二、Fast Neural Style</h1><h1 id="基于感知损失函数的图像风格迁移"><a href="#基于感知损失函数的图像风格迁移" class="headerlink" title="基于感知损失函数的图像风格迁移"></a>基于感知损失函数的图像风格迁移</h1><h2 id="Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution"><a href="#Perceptual-Losses-for-Real-Time-Style-Transfer-and-Super-Resolution" class="headerlink" title="Perceptual Losses for  Real-Time Style Transfer and Super-Resolution"></a>Perceptual Losses for  Real-Time Style Transfer and Super-Resolution</h2><p>Gatys 的方法每次要将一幅内容图像进行风格迁移，就要进行不断的迭代，将原有噪声图进行微调，逐步逼近。<br>李飞飞的方法是先将其进行训练，训练得到前向生成网络，再将待转换图像输入，即可得到预训练风格的图像。</p>
-<p>训练一个用于图像转换任务的前馈网络，且不用逐像素求差构造损失函数，转而使用感知损失函数，从预训练好的网络中提取高级特征。在训练的过程中，感知损失函数比逐像素损失函数更适合用来衡量图像之间的相似程度。</p>
+<p>训练一个用于图像转换任务的前馈网络，且不用逐像素求差构造损失函数，转而使用感知损失函数，从预训练好的网络中提取高级特征。在训练的过程中，感知损失函数比逐像素损失函数更适合用来衡量图像之间的相似程度。<br><img src="/2018/07/08/Style_Transfer图像风格迁移/fast_net.png" alt="fast_net"></p>
+<h1 id="2-1-Loss-Network"><a href="#2-1-Loss-Network" class="headerlink" title="2.1 Loss Network"></a>2.1 Loss Network</h1><p>损失网络定义内容损失，分别衡量内容和风格上的差距。为了改进逐像素损失函数的缺点，使用一个预先训练好的图像分类的CNN，这个CNN已经学会感知场景和语义信息，而且参数不做更新，只是用来做内容损失和风格损失的计算，而不像Gatys方法做更新这部分网络的参数，训练更新的是前面的生成网络的权值参数。</p>
+<h1 id="2-2-Image-Transform-Net"><a href="#2-2-Image-Transform-Net" class="headerlink" title="2.2 Image Transform Net"></a>2.2 Image Transform Net</h1><p>转换网络是一个深度残差网络，不用任何的池化层，取而代之的是用步幅卷积或微步幅卷积做网络内的上采样或者下采样。用来将输入图像直接转换为带有风格的图像。</p>
+<p>所以从整个网络的结构上来看，输入图像通过转换网络得到转换的图像，然后计算对应的损失，整个网络通过最小化这个损失去不断更新前面的转换网络权值。</p>
+<h2 id="训练阶段"><a href="#训练阶段" class="headerlink" title="训练阶段"></a>训练阶段</h2><p>选定一张风格图片。训练过程中，将数据集中的图片输入网络，转换网络生成结果图片y,损失网络提取图像的特征图，将生成图片y分别于目标风格图片ys和目标输入图片（内容图片）yc做损失计算，根据损失值来调整转换网络的权值，通过最小化损失值来达到目标效果。</p>
+<h2 id="执行阶段"><a href="#执行阶段" class="headerlink" title="执行阶段"></a>执行阶段</h2><p>给定一张图片，将其输入已经训练好的转换网络，输出这张图片网络转换后的结果。</p>
+<p>核心是先训练保存常用的“风格”参数。用户输入需要转换风格的图像A到网络中，再指定网络调用B风格的参数，输出的图片C其实只是网络最后一层的输出，中间不会涉及过多的参数调整及优化。</p>
 
           
         
