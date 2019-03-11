@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="First do it, then do it right, then do it better.">
+<meta name="description" content="创建版本库123$ mkdir newfold //新建文件夹$ cd newfold      //进入文件夹$ git init            //把这个目录变成git可以管理的仓库，版本库创建完毕 把readme.txt文件添加到版本库  首先，将readme.txt文件存放到刚创建的版本库目录 或子目录中，然后，使用命令添加12$ git add readme.txt">
 <meta property="og:type" content="article">
 <meta property="og:title" content="git使用介绍">
 <meta property="og:url" content="http://yoursite.com/2019/03/11/git使用介绍/index.html">
 <meta property="og:site_name" content="Leila 的博客">
-<meta property="og:description" content="First do it, then do it right, then do it better.">
+<meta property="og:description" content="创建版本库123$ mkdir newfold //新建文件夹$ cd newfold      //进入文件夹$ git init            //把这个目录变成git可以管理的仓库，版本库创建完毕 把readme.txt文件添加到版本库  首先，将readme.txt文件存放到刚创建的版本库目录 或子目录中，然后，使用命令添加12$ git add readme.txt">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-03-11T09:57:01.842Z">
+<meta property="og:updated_time" content="2019-03-11T12:07:29.788Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="git使用介绍">
-<meta name="twitter:description" content="First do it, then do it right, then do it better.">
+<meta name="twitter:description" content="创建版本库123$ mkdir newfold //新建文件夹$ cd newfold      //进入文件夹$ git init            //把这个目录变成git可以管理的仓库，版本库创建完毕 把readme.txt文件添加到版本库  首先，将readme.txt文件存放到刚创建的版本库目录 或子目录中，然后，使用命令添加12$ git add readme.txt">
 
 
 
@@ -299,7 +299,18 @@
       
 
       
-        
+        <h3 id="创建版本库"><a href="#创建版本库" class="headerlink" title="创建版本库"></a>创建版本库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ mkdir newfold //新建文件夹</span><br><span class="line">$ <span class="built_in">cd</span> newfold      //进入文件夹</span><br><span class="line">$ git init            //把这个目录变成git可以管理的仓库，版本库创建完毕</span><br></pre></td></tr></table></figure>
+<h3 id="把readme-txt文件添加到版本库"><a href="#把readme-txt文件添加到版本库" class="headerlink" title="把readme.txt文件添加到版本库"></a>把readme.txt文件添加到版本库</h3><p>  首先，将readme.txt文件存放到刚创建的版本库目录 或子目录中，然后，使用命令添加<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git add readme.txt                   //把工作区文件添加到版本库的暂存区(stage)</span><br><span class="line">$ git commit -m <span class="string">"一定要有说明"</span>   //把暂存区所有内容提交到当前分支(master)</span><br></pre></td></tr></table></figure></p>
+<h3 id="查看"><a href="#查看" class="headerlink" title="查看"></a>查看</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git status  //是否有修改 是否有准备提交的修改</span><br><span class="line">$ git diff     // 查看修改</span><br><span class="line">$ git <span class="built_in">log</span>      //查看提交记录</span><br></pre></td></tr></table></figure>
+<h3 id="版本回退"><a href="#版本回退" class="headerlink" title="版本回退"></a>版本回退</h3><p>HEAD 指向的版本就是当前版本，git允许在版本的历史之间穿梭，<br>穿梭前，用<code>git log</code>查看提交历史，以便确定要回退到哪个版本<br>穿梭后，要重返未来，用<code>git reflog</code>查看历史命令，确定返回哪个版本<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git reset --hard HEAD^             //回到上个版本</span><br><span class="line">$ git reset --hard HEAD^^           //回到前一个版本</span><br><span class="line">$ git reset --hard commit_id       //commit_id 为版本号前几位</span><br></pre></td></tr></table></figure></p>
+<h3 id="撤销修改"><a href="#撤销修改" class="headerlink" title="撤销修改"></a>撤销修改</h3><p>场景1：当你改乱了工作区某个文件的内容，想直接丢弃工作区的修改时，用命令<code>git checkout -- file</code>。</p>
+<p>场景2：当你不但改乱了工作区某个文件的内容，还添加到了暂存区时，想丢弃修改，分两步，<br>第一步用命令<code>git reset HEAD &lt;file&gt;</code>，就回到了场景1，第二步按场景1操作。</p>
+<p>场景3：已经提交了不合适的修改到版本库时，想要撤销本次提交，参考版本回退一节，不过前提是没有推送到远程库。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git status  //是否有修改 是否有准备提交的修改</span><br><span class="line">$ git diff     // 查看修改</span><br><span class="line">$ git <span class="built_in">log</span>      //查看提交记录</span><br></pre></td></tr></table></figure>
+<h3 id="删除文件"><a href="#删除文件" class="headerlink" title="删除文件"></a>删除文件</h3><p>直接在文件夹删除或使用rm命令删除工作区文件后，工作区与版本库不一致<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git rm readme.txt  //确认删除</span><br><span class="line">$ git commit -m <span class="string">"说明"</span>     // 提交</span><br><span class="line">$ git checkout --readme.txt      //用版本库版本替换工作区版本，相当于恢复文件</span><br></pre></td></tr></table></figure></p>
+<h3 id="GitHub远程库"><a href="#GitHub远程库" class="headerlink" title="GitHub远程库"></a>GitHub远程库</h3><p>关联本地仓库：<br>1.Create a new repo<br>2.重命名为本地仓库名<br>3.在本地仓库下运行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ git remote add origin git@github.com:Xuningn/newfold.git  //关联远程库 远程库名为`origin`</span><br><span class="line">$ git push -u origin master                        								//第一次推送本地库中的所有内容到远程库</span><br><span class="line">$ git push origin master //简化</span><br></pre></td></tr></table></figure></p>
+<p>More info: <a href="https://www.liaoxuefeng.com/wiki/0013739516305929606dd18361248578c67b8067c8c017b000" target="_blank" rel="noopener">廖雪峰Git教程</a></p>
+
       
     </div>
     
@@ -383,8 +394,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -430,6 +450,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#创建版本库"><span class="nav-number">1.</span> <span class="nav-text">创建版本库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#把readme-txt文件添加到版本库"><span class="nav-number">2.</span> <span class="nav-text">把readme.txt文件添加到版本库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查看"><span class="nav-number">3.</span> <span class="nav-text">查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#版本回退"><span class="nav-number">4.</span> <span class="nav-text">版本回退</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#撤销修改"><span class="nav-number">5.</span> <span class="nav-text">撤销修改</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#删除文件"><span class="nav-number">6.</span> <span class="nav-text">删除文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GitHub远程库"><span class="nav-number">7.</span> <span class="nav-text">GitHub远程库</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
